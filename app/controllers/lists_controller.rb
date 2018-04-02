@@ -4,7 +4,7 @@ class ListsController < ApplicationController
   # GET /lists
   # GET /lists.json
   def index
-    @lists = List.all
+    @lists = List.where(:isPublic => true).where(:user_id => current_user.id)
   end
 
   # GET /lists/1
@@ -52,6 +52,12 @@ class ListsController < ApplicationController
     end
   end
 
+  def favorites
+    sad
+    # @lists = List.where(:favorite_user => current_user)
+    @lists = current_user.favorite_lists
+  end
+
   # DELETE /lists/1
   # DELETE /lists/1.json
   def destroy
@@ -70,6 +76,6 @@ class ListsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def list_params
-      params.require(:list).permit(:name)
+      params.require(:list).permit(:name, :isPublic)
     end
 end
