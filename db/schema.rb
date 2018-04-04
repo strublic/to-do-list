@@ -10,7 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180402005140) do
+ActiveRecord::Schema.define(version: 20180404025105) do
+
+  create_table "favorite_lists_users", id: false, force: :cascade do |t|
+    t.integer "favorite_user_id", null: false
+    t.integer "favorite_list_id", null: false
+  end
+
+  create_table "favorites", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id"
+    t.integer "list_id"
+    t.index ["list_id"], name: "index_favorites_on_list_id"
+    t.index ["user_id"], name: "index_favorites_on_user_id"
+  end
 
   create_table "lists", force: :cascade do |t|
     t.string "name"
@@ -27,6 +41,7 @@ ActiveRecord::Schema.define(version: 20180402005140) do
     t.datetime "updated_at", null: false
     t.integer "user_id"
     t.integer "list_id"
+    t.boolean "status"
     t.index ["list_id"], name: "index_tasks_on_list_id"
     t.index ["user_id"], name: "index_tasks_on_user_id"
   end

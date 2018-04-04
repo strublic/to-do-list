@@ -6,6 +6,8 @@
       <tr>
         <th class="col-md-2">Name</th>
         <th class="col-md-2">Author</th>
+        <th class="col-md-2">List</th>
+        <th class="col-md-2">Status</th>
         <th class="col-md-4">Options</th>
       </tr>
     </thead>
@@ -13,11 +15,16 @@
       <% @tasks.each do |task| %>
         <tr>
           <td class="col-md-2"><%= task.name %></td>
-          <td class="col-md-2"><%= task.user.try(:email) %></td>
+          <td class="col-md-2"><%= task.author.try(:name) %></td>
+          <td class="col-md-2 list-task"><%= link_to task.list.try(:name), task.list %></td>
+          <td class="col-md-2"><%= task.status ? "Opened" : "Closed" %></td>
           <td class="col-md-4">
             <%= link_to 'Show', task_path(task), class: "btn btn-info" %>
             <%= link_to 'Edit', edit_task_path(task), class: "btn  btn-warning" %>
             <%= link_to 'Destroy', task_path(task), method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %>
+            <% if task.author.id == current_user.id %>
+              <%= link_to task.status ? 'Close' : 'Open', change_status_path(:task_id => task.id.to_s), class: task.status ? "btn btn-default" : "btn btn-success" %>
+            <% end %>
           </td>
       </tr>
       <% end %>

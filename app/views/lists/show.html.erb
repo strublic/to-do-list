@@ -5,6 +5,10 @@
   <strong>Name:</strong>
   <%= @list.name %>
 </p>
+<p>
+  <strong>Permission:</strong>
+  <%= @list.isPublic ? "Public" : "Private" %>
+</p>
 
 <%= link_to 'Edit', edit_list_path(@list), class: "btn btn-warning" %>
-<%= link_to "Back", lists_path, class: "btn btn-default" %>
+<%= link_to "All Lists", lists_path, class: "btn btn-default" %>

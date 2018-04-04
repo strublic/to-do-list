@@ -4,7 +4,9 @@ class ListsController < ApplicationController
   # GET /lists
   # GET /lists.json
   def index
-    @lists = List.where(:isPublic => true).where(:user_id => current_user.id)
+    # @lists = List.where(:isPublic => true).or(:user_id => current_user.id)
+    @lists = List.where("isPublic = ? OR user_id = ?", true, current_user.id)
+
   end
 
   # GET /lists/1
@@ -53,9 +55,29 @@ class ListsController < ApplicationController
   end
 
   def favorites
-    sad
-    # @lists = List.where(:favorite_user => current_user)
-    @lists = current_user.favorite_lists
+    favorites = Favorite.where(:user_id => current_user.id)
+    @lists = favorites.map(&:list)
+  end
+
+  def set_favorites
+    list = List.find(params[:list_id].to_s)
+    favorite = Favorite.where(:user_id => current_user.id, :list_id => list.id)
+
+    if favorite.count > 0
+      favorite.first.destroy
+      if params[:root_path] == "fav"
+        redirect_to "/favorites"
+      else
+        redirect_to "/lists"
+      end
+    else
+      favorite = Favorite.new()
+      favorite.user_id = current_user.id
+      favorite.list_id = list.id
+      if favorite.save
+        redirect_to "/lists"
+      end
+    end
   end
 
   # DELETE /lists/1

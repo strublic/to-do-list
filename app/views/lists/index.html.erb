@@ -15,13 +15,23 @@
       <% @lists.each do |list| %>
         <tr>
           <td class="col-md-2"><%= list.name %></td>
-          <td class="col-md-2"><%= list.user.try(:email) %></td>
+          <td class="col-md-2"><%= list.author.try(:email) %></td>
           <td class="col-md-2"><%= list.tasks.count %></td>
-          <td class="col-md-2"><%= list.isPublic ? "Público" : "Privado" %></td>
+          <td class="col-md-2"><%= list.isPublic ? "Public" : "Private" %></td>
           <td class="col-md-4">
+            <%= link_to 'Add task', new_task_path(:list_id => list.id), class: "btn btn-info" %>
             <%= link_to 'Show', list_path(list), class: "btn btn-info" %>
             <%= link_to 'Edit', edit_list_path(list), class: "btn  btn-warning" %>
             <%= link_to 'Destroy', list_path(list), method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %>
+            <% if list.author.id != current_user.id %>
+              <a href="<%= set_favorites_path(:list_id => list.id) %>">
+                <% if Favorite.where(:user_id => current_user.id, :list_id => list.id).count > 0 %>
+                    <%= image_tag "heart-like.png" %>
+                <% else %>
+                    <%= image_tag "heart-unlike.png" %>
+                <% end %>
+              </a>
+            <% end %>
           </td>
       </tr>
       <% end %>
