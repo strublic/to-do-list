@@ -15,7 +15,7 @@
       <% @lists.each do |list| %>
         <tr>
           <td class="col-md-2"><%= list.name %></td>
-          <td class="col-md-2"><%= list.author.try(:email) %></td>
+          <td class="col-md-2"><%= list.author.try(:name) %></td>
           <td class="col-md-2"><%= list.tasks.count %></td>
           <td class="col-md-2"><%= list.isPublic ? "Public" : "Private" %></td>
           <td class="col-md-4">
